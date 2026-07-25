@@ -109,6 +109,28 @@ El arnés agéntico se configuró mediante el archivo `AGENTS.md` en la raíz de
    - **En Celular (Expo Go):** Escanea el código QR mostrado en la terminal desde la app Expo Go (Android) o Cámara (iOS).
    - **En Emulador Android:** Presiona `a` en la terminal (con un emulador activo).
 
+### Solución de problemas de conexión con celular
+
+Si al escanear el código QR desde Expo Go no conecta o muestra error de versión incompatible:
+
+1. **Forzar modo LAN** (red local):
+   ```bash
+   npx expo start --lan
+   ```
+   Esto genera un QR con la IP local de tu máquina en vez de usar túneles de Expo.
+
+2. **Verificar red WiFi:**
+   - Tu celular y tu PC deben estar en la **misma red WiFi**.
+   - Si usás red corporativa o universitaria, pueden bloquear los puertos 19000-19002.
+
+3. **Conexión manual por URL:**
+   - Copiar la URL que muestra la terminal: `exp://192.168.x.x:8081`
+   - En Expo Go, tocar "Enter URL manually" y pegar la URL.
+
+4. **Incompatibilidad de versiones:**
+   - Si Expo Go dice "SDK 57 requerido" pero el proyecto usa SDK 54, el problema es que tu Expo Go es muy nuevo.
+   - Opciones: actualizar el proyecto con `npx expo install expo@latest` o instalar una versión compatible de Expo Go.
+
 4. **Credenciales de prueba para Login:**
    - **Email:** `test@test.com`
    - **Password:** `123456`
