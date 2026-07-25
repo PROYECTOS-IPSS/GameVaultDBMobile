@@ -1,15 +1,27 @@
-import { Pressable, ActivityIndicator, StyleSheet, type PressableProps } from 'react-native';
+import { Pressable, ActivityIndicator, View, StyleSheet, type PressableProps } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Text } from './Text';
+import { Icon } from './Icon';
 import { colors, radii, spacing } from '../../theme';
 
 interface ButtonProps extends PressableProps {
   title: string;
   variant?: 'primary' | 'ghost' | 'success';
+  icon?: keyof typeof MaterialCommunityIcons.glyphMap;
   loading?: boolean;
   fullWidth?: boolean;
 }
 
-export function Button({ title, variant = 'primary', loading, fullWidth, disabled, style, ...props }: ButtonProps) {
+export function Button({
+  title,
+  variant = 'primary',
+  icon,
+  loading,
+  fullWidth,
+  disabled,
+  style,
+  ...props
+}: ButtonProps) {
   const isDisabled = disabled || loading;
   const pressedStyles: Record<string, object> = {
     primary: styles.primaryPressed,
@@ -33,9 +45,12 @@ export function Button({ title, variant = 'primary', loading, fullWidth, disable
       {loading ? (
         <ActivityIndicator color={colors.text} />
       ) : (
-        <Text style={styles.text} weight="semibold">
-          {title}
-        </Text>
+        <View style={styles.content}>
+          {icon && <Icon name={icon} size={20} color={colors.text} />}
+          <Text style={styles.text} weight="semibold">
+            {title}
+          </Text>
+        </View>
       )}
     </Pressable>
   );
@@ -49,6 +64,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     minHeight: 48,
+  },
+  content: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: spacing.sm,
   },
   primary: {
     backgroundColor: colors.accent,
