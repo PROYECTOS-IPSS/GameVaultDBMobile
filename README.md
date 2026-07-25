@@ -1,50 +1,72 @@
-# Welcome to your Expo app 👋
+# GameVault DB Mobile
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+App móvil complementaria de GameVaultDB. React Native + Expo SDK 54 + TypeScript.
 
-## Get started
+## Stack
 
-1. Install dependencies
+- React Native 0.81.5
+- Expo SDK 54
+- Expo Router 6
+- TypeScript 5.9
+- Zod 3.24
+- Google Fonts (Inter + Space Grotesk)
 
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+## Instalación
 
 ```bash
-npm run reset-project
+yarn install
+yarn start
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Escanea QR con Expo Go (Android/iOS) o presiona `w` para web.
 
-## Learn more
+## Credenciales de prueba
 
-To learn more about developing your project with Expo, look at the following resources:
+- Email: `test@test.com`
+- Password: `123456`
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## Estructura
 
-## Join the community
+```
+app/                    # Pantallas (Expo Router)
+├── _layout.tsx         # Root layout (fonts, providers)
+├── index.tsx           # Entry (redirect condicional)
+├── login.tsx           # Pantalla login
+└── home.tsx            # Pantalla home (protegida)
 
-Join our community of developers creating universal apps.
+src/
+├── theme/              # Colores, tipografía, espaciado
+├── components/
+│   ├── ui/             # Atoms (Button, Text, Input, Label, TextInput)
+│   └── features/       # Organisms (LoginForm)
+├── hooks/              # Custom hooks (useAuth, useForm, use-color-scheme)
+└── schemas/            # Validaciones Zod
+```
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Módulos
+
+- **Auth:** Login con validación Zod, sesión mock en memoria
+- **Home:** Pantalla protegida con bienvenida y logout
+
+## Estética
+
+Réplica del web: dark theme (`#0a0a0a`), rojo accent (`#dc2626`), Space Grotesk (headings) + Inter (body).
+
+## Comandos
+
+```bash
+yarn start              # Inicia Metro bundler
+yarn android            # Corre en Android
+yarn ios                # Corre en iOS (macOS)
+yarn web                # Corre en web
+yarn lint               # ESLint
+```
+
+## Convenciones
+
+Ver `AGENTS.md` para detalles completos:
+- TypeScript estricto (sin `any`)
+- Atomic Design (atoms → molecules → organisms → screens)
+- Rutas relativas en imports
+- Validación con Zod antes de enviar
+- Textos en español
