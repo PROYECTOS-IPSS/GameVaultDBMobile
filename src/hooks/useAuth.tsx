@@ -1,12 +1,5 @@
 import { createContext, useContext, useState, useCallback, type ReactNode } from 'react';
-
-interface User {
-  id: number;
-  nombre: string;
-  apellido: string;
-  segundoApellido: string;
-  email: string;
-}
+import type { User } from '../types/user';
 
 interface AuthContextValue {
   user: User | null;
@@ -17,40 +10,39 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
-const VALID_EMAIL = 'test@test.com';
-const VALID_PASSWORD = '123456';
-
-const MOCK_USER: User = {
+const DEFAULT_USER: User = {
   id: 1,
   nombre: 'Test',
   apellido: 'Usuario',
-  segundoApellido: 'Demo',
-  email: VALID_EMAIL,
+  email: 'test@test.com',
 };
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const login = useCallback(async (email: string, password: string) => {
+  const login = useCallback(async (email: string, _password: string) => {
     setLoading(true);
-    const { promise, resolve, reject } = Promise.withResolvers<void>();
-    
-    setTimeout(() => {
-      if (email !== VALID_EMAIL || password !== VALID_PASSWORD) {
-        setLoading(false);
-        reject(new Error('Credenciales inválidas'));
-      } else {
-        setUser(MOCK_USER);
+    await new Promise<void>((resolve) => {
+      setTimeout(() => {
+        const namePart = email.split('@')[0] ?? 'Gamer';
+        const capitalizedName = namePart.charAt(0).toUpperCase() + namePart.slice(1);
+
+        setUser({
+          id: Date.now(),
+          nombre: email === 'test@test.com' ? DEFAULT_USER.nombre : capitalizedName,
+          apellido: email === 'test@test.com' ? DEFAULT_USER.apellido : 'Player',
+          email,
+        });
         setLoading(false);
         resolve();
-      }
-    }, 800);
-    
-    await promise;
+      }, 500);
+    });
   }, []);
 
-  const logout = useCallback(() => setUser(null), []);
+  const logout = useCallback(() => {
+    setUser(null);
+  }, []);
 
   return (
     <AuthContext.Provider value={{ user, loading, login, logout }}>
