@@ -1,5 +1,5 @@
-import { Text as RNText, type TextProps as RNTextProps, StyleSheet, Platform } from 'react-native';
-import { colors, fontWeights } from '../../theme';
+import { Text as RNText, type TextProps as RNTextProps, StyleSheet } from 'react-native';
+import { colors, fonts, fontWeights } from '../../theme';
 
 interface TextProps extends RNTextProps {
   variant?: 'display' | 'heading' | 'body' | 'caption';
@@ -8,30 +8,14 @@ interface TextProps extends RNTextProps {
 
 export function Text({ variant = 'body', weight = 'regular', style, ...props }: TextProps) {
   const isDisplayOrHeading = variant === 'display' || variant === 'heading';
-
-  const fontFamily = isDisplayOrHeading
-    ? weight === 'bold'
-      ? 'SpaceGrotesk_Bold'
-      : weight === 'semibold'
-      ? 'SpaceGrotesk_SemiBold'
-      : weight === 'medium'
-      ? 'SpaceGrotesk_Medium'
-      : 'SpaceGrotesk'
-    : weight === 'bold'
-    ? 'Inter_Bold'
-    : weight === 'semibold'
-    ? 'Inter_SemiBold'
-    : weight === 'medium'
-    ? 'Inter_Medium'
-    : 'Inter';
+  const fontFamily = isDisplayOrHeading ? fonts.display : fonts.body;
 
   return (
     <RNText
       style={[
         styles.base,
         styles[variant],
-        { fontFamily },
-        Platform.OS === 'ios' ? { fontWeight: fontWeights[weight] } : undefined,
+        { fontFamily, fontWeight: fontWeights[weight] },
         style,
       ]}
       {...props}
