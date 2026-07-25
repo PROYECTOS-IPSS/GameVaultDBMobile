@@ -1,15 +1,13 @@
-import { useEffect } from 'react';
-import { router } from 'expo-router';
 import { useAuth } from '../src/hooks/useAuth';
+import LoginScreen from './login';
+import HomeScreen from './home';
 
 export default function IndexScreen() {
   const { user } = useAuth();
 
-  useEffect(() => {
-    if (!user) {
-      router.replace('/login' as any);
-    }
-  }, [user]);
+  if (!user) {
+    return <LoginScreen />;
+  }
 
-  return null;
+  return <HomeScreen />;
 }

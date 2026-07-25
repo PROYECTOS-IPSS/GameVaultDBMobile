@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Text, Input, Button } from '../ui';
-import { colors, spacing } from '../../theme';
+import { Text, Input, Button, Icon } from '../ui';
+import { colors, radii, spacing } from '../../theme';
 import { useForm } from '../../hooks/useForm';
 import { loginSchema } from '../../schemas';
 import type { LoginInput } from '../../schemas';
@@ -13,7 +13,7 @@ interface LoginFormProps {
 
 export function LoginForm({ onSubmit, loading }: LoginFormProps) {
   const [submitError, setSubmitError] = useState<string | null>(null);
-  
+
   const { values, errors, setValue, isValid } = useForm<LoginInput>({
     initialValues: { email: '', password: '' },
     validate: (vals) => {
@@ -33,7 +33,7 @@ export function LoginForm({ onSubmit, loading }: LoginFormProps) {
   const handleSubmit = async () => {
     setSubmitError(null);
     if (!isValid()) return;
-    
+
     try {
       await onSubmit(values);
     } catch (err) {
@@ -51,13 +51,17 @@ export function LoginForm({ onSubmit, loading }: LoginFormProps) {
       </Text>
 
       {submitError && (
-        <Text variant="caption" style={styles.submitError}>
-          {submitError}
-        </Text>
+        <View style={styles.errorBox}>
+          <Icon name="alert-circle-outline" size={18} color={colors.accent} />
+          <Text variant="caption" style={styles.submitError}>
+            {submitError}
+          </Text>
+        </View>
       )}
 
       <Input
         label="Email"
+        placeholder="nombre@ejemplo.com"
         value={values.email}
         onChangeText={(text) => setValue('email', text)}
         error={errors.email}
@@ -67,6 +71,7 @@ export function LoginForm({ onSubmit, loading }: LoginFormProps) {
       />
       <Input
         label="Contraseña"
+        placeholder="••••••••"
         value={values.password}
         onChangeText={(text) => setValue('password', text)}
         error={errors.password}
@@ -74,7 +79,14 @@ export function LoginForm({ onSubmit, loading }: LoginFormProps) {
         autoComplete="password"
       />
 
-      <Button title="Ingresar" onPress={handleSubmit} loading={loading} fullWidth />
+      <Button title="Ingresar" icon="login" onPress={handleSubmit} loading={loading} fullWidth />
+
+      <View style={styles.hintCard}>
+        <Icon name="information-outline" size={16} color={colors.textSecondary} />
+        <Text variant="caption" style={styles.hintText}>
+          Prueba con: <Text variant="caption" weight="medium" style={styles.hintHighlight}>test@test.com</Text> / <Text variant="caption" weight="medium" style={styles.hintHighlight}>123456</Text>
+        </Text>
+      </View>
     </View>
   );
 }
@@ -87,8 +99,36 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
     marginBottom: spacing.lg,
   },
+  errorBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.xs,
+    backgroundColor: '#2c1212',
+    borderWidth: 1,
+    borderColor: '#7f1d1d',
+    borderRadius: radii.sm,
+    padding: spacing.sm,
+    marginBottom: spacing.md,
+  },
   submitError: {
     color: colors.accent,
-    marginBottom: spacing.md,
+  },
+  hintCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.xs,
+    backgroundColor: colors.bg,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: radii.sm,
+    padding: spacing.sm,
+    marginTop: spacing.lg,
+  },
+  hintText: {
+    color: colors.textSecondary,
+    fontSize: 12,
+  },
+  hintHighlight: {
+    color: colors.text,
   },
 });
